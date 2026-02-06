@@ -16,10 +16,7 @@ body {
   box-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 
-h2, h3 {
-  color: #ffd700;
-  text-shadow: 0 0 6px #00bfff;
-}
+h2, h3 { color: #ffd700; text-shadow: 0 0 6px #00bfff; }
 
 progress {
   width: 100%;
@@ -81,6 +78,16 @@ th {
 }
 
 tbody tr:hover { background: rgba(255,255,255,0.1); }
+
+/* ===== 高亮動畫 ===== */
+.highlight {
+  animation: highlightAnim 3s forwards;
+}
+
+@keyframes highlightAnim {
+  0% { background-color: rgba(255,255,255,0.5); }
+  100% { background-color: transparent; }
+}
 </style>
 </head>
 <body>
@@ -108,27 +115,41 @@ tbody tr:hover { background: rgba(255,255,255,0.1); }
 const SCRIPT_URL = "https://script.google.com/macros/s/XXXX/exec"; // ← 改成你的 Apps Script URL
 const MAX = 50000000;
 
+// 讀取資料
 async function fetchRecords() {
   const res = await fetch(SCRIPT_URL);
   const data = await res.json();
   return data;
 }
 
+// 更新 UI
+let lastCount = 0; // 記錄上次名冊長度
 async function updateUI() {
   const records = await fetchRecords();
   const list = document.getElementById("list");
   list.innerHTML = "";
   let total = 0;
-  records.forEach(r => {
+
+  records.forEach((r, index) => {
     total += Number(r.amount);
     const row = document.createElement("tr");
     row.innerHTML = `<td>${r.name}</td><td>${Number(r.amount).toLocaleString()}</td>`;
+    
+    // 如果這筆是新加入的，加上 highlight class
+    if(index >= lastCount) {
+      row.classList.add("highlight");
+    }
+
     list.appendChild(row);
   });
+
+  lastCount = records.length; // 更新紀錄長度
+
   document.getElementById("bar").value = total;
   document.getElementById("text").innerText = total.toLocaleString() + " / " + MAX.toLocaleString();
 }
 
+// 新增紀錄
 async function addRecord() {
   const name = document.getElementById("name").value.trim();
   const amount = Number(document.getElementById("amount").value);
@@ -144,6 +165,7 @@ async function addRecord() {
   updateUI();
 }
 
+// 每 5 秒自動刷新
 setInterval(updateUI, 5000);
 updateUI();
 </script>
