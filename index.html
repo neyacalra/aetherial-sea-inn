@@ -9,14 +9,14 @@ body {
   max-width: 750px;
   margin: 40px auto;
   line-height: 1.6;
-  background: #f0f4f8; /* 淺色清爽背景 */
-  color: #1a1a1a;      /* 深色文字 */
+  background: linear-gradient(to bottom, #0b0f2a, #1b1f3f);
+  color: #f0f0f0;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 
-h2, h3 { color: #0d6efd; } /* 清爽藍色標題 */
+h2, h3 { color: #ffd700; text-shadow: 0 0 6px #00bfff; }
 
 progress {
   width: 100%;
@@ -26,63 +26,64 @@ progress {
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 12px;
-  background-color: #dce4f0;
+  background-color: #2a2f4a;
 }
 
-progress::-webkit-progress-bar { background-color: #dce4f0; }
-progress::-webkit-progress-value { background: linear-gradient(90deg, #0d6efd, #6610f2); }
-progress::-moz-progress-bar { background: linear-gradient(90deg, #0d6efd, #6610f2); }
+progress::-webkit-progress-bar { background-color: #2a2f4a; }
+progress::-webkit-progress-value { background: linear-gradient(90deg, #00bfff, #8a2be2); }
+progress::-moz-progress-bar { background: linear-gradient(90deg, #00bfff, #8a2be2); }
 
 #text {
   font-weight: bold;
   margin-bottom: 20px;
-  font-size: 24px;        /* 放大字型 */
-  text-align: center;      /* 置中 */
-  color: #0d6efd;
+  font-size: 24px;       /* 放大字型 */
+  text-align: center;     /* 置中 */
+  color: #00ffff;
 }
 
 input, button {
   padding: 8px;
   margin: 6px 0;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: none;
   font-size: 16px;
 }
 
 input { width: calc(50% - 10px); margin-right: 10px; }
 
 button {
-  background: linear-gradient(to right, #0d6efd, #6610f2);
+  background: linear-gradient(to right, #00bfff, #8a2be2);
   color: #fff;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
 }
 
-button:hover { background: linear-gradient(to right, #6610f2, #0d6efd); }
+button:hover { background: linear-gradient(to right, #8a2be2, #00bfff); }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 16px;
-  background: #ffffff; /* 清爽表格背景 */
+  background: rgba(255,255,255,0.05);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 th, td {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 th {
-  background: #e9f2ff;
-  color: #0d6efd;
+  background: rgba(0,191,255,0.3);
+  color: #fff;
+  text-shadow: 0 0 3px #000;
 }
 
-tbody tr:hover { background: #f1f7ff; }
+tbody tr:hover { background: rgba(255,255,255,0.1); }
 
 /* 高亮動畫 */
 .highlight {
@@ -90,7 +91,7 @@ tbody tr:hover { background: #f1f7ff; }
 }
 
 @keyframes highlightAnim {
-  0% { background-color: #ffeeba; }
+  0% { background-color: rgba(255,255,255,0.5); }
   100% { background-color: transparent; }
 }
 </style>
@@ -117,7 +118,7 @@ tbody tr:hover { background: #f1f7ff; }
 </table>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/XXXX/exec"; // ← 改成你的 Apps Script URL
+const SCRIPT_URL = "https://script.google.com/macros/s/XXXX/exec"; // ← 替換成你的 Apps Script URL
 const MAX = 50000000;
 
 async function fetchRecords() {
