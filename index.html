@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>星海旅店｜潛水艇基金進度</title>
+<title>星海旅店｜買房基金進度</title>
 <style>
 body { font-family: system-ui; max-width:700px; margin:40px auto; line-height:1.6; }
 progress { width:100%; height:24px; margin-bottom:12px; }
@@ -12,12 +12,11 @@ table { width:100%; border-collapse: collapse; margin-top:12px; }
 th, td { border-bottom:1px solid #ddd; padding:6px; text-align:left; }
 th { background:#f5f5f5; }
 .admin { background:#f0f7ff; padding:10px; margin-top:20px; border-left:4px solid #4a90e2; }
-.hidden { display:none; }
 </style>
 </head>
 <body>
 
-<h2>🚢 星海旅店｜潛水艇基金進度</h2>
+<h2>🚢 星海旅店｜買房基金進度</h2>
 
 <progress id="bar" value="0" max="50000000"></progress>
 <p id="text">0 / 50,000,000</p>
@@ -35,18 +34,18 @@ th { background:#f5f5f5; }
   <tbody id="list"></tbody>
 </table>
 
-<!-- 管理員登入低調 -->
+<!-- 管理員 -->
 <div class="admin">
-  <h4>🔒 管理員操作（低調使用）</h4>
-  <p>登入後可直接在 Google Sheet 編輯刪除紀錄</p>
+  <h4>🔒 管理員操作</h4>
+  <p>可直接在 Google Sheet 編輯或刪除紀錄</p>
   <a href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID" target="_blank">管理員專用 Sheet</a>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpYF4zl0HKhAEwNB3D8H4XwvKIIBRmeBuUGmi5zWEW3_dMkpRbuu8T5PIxWEbhkSbDLw/exec"; // ← 替換成 Apps Script 網址
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpYF4zl0HKhAEwNB3D8H4XwvKIIBRmeBuUGmi5zWEW3_dMkpRbuu8T5PIxWEbhkSbDLw/exec"; // ← 改成你 Apps Script URL
 const MAX = 50000000;
 
-// 讀取 Google Sheet 資料
+// 讀取資料
 async function fetchRecords() {
   const res = await fetch(SCRIPT_URL);
   const data = await res.json();
@@ -79,6 +78,7 @@ async function addRecord() {
     method: "POST",
     body: JSON.stringify({name, amount})
   });
+
   document.getElementById("name").value = "";
   document.getElementById("amount").value = "";
   updateUI();
@@ -91,4 +91,3 @@ updateUI();
 
 </body>
 </html>
-
