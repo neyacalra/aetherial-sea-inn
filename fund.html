@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>🚢 潛水艇基金進度</h2>
+
+<progress id="bar" value="0" max="50000000"></progress>
+<p id="text">0 / 50,000,000</p>
+
+<input type="number" id="amount" placeholder="輸入金額">
+<button onclick="add()">新增</button>
+
+<script>
+let total = 0;
+function add(){
+  total += Number(document.getElementById("amount").value);
+  document.getElementById("bar").value = total;
+  document.getElementById("text").innerText =
+    total.toLocaleString() + " / 50,000,000";
+}
+</script>
+</body>
+</html>
