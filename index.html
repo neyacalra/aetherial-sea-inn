@@ -9,14 +9,14 @@ body {
   max-width: 750px;
   margin: 40px auto;
   line-height: 1.6;
-  background: linear-gradient(to bottom, #0b0f2a, #1b1f3f);
-  color: #f0f0f0;
+  background: #f0f4f8; /* 淺色清爽背景 */
+  color: #1a1a1a;      /* 深色文字 */
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-h2, h3 { color: #ffd700; text-shadow: 0 0 6px #00bfff; }
+h2, h3 { color: #0d6efd; } /* 清爽藍色標題 */
 
 progress {
   width: 100%;
@@ -26,66 +26,71 @@ progress {
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 12px;
-  background-color: #2a2f4a;
+  background-color: #dce4f0;
 }
 
-progress::-webkit-progress-bar { background-color: #2a2f4a; }
-progress::-webkit-progress-value { background: linear-gradient(90deg, #00bfff, #8a2be2); }
-progress::-moz-progress-bar { background: linear-gradient(90deg, #00bfff, #8a2be2); }
+progress::-webkit-progress-bar { background-color: #dce4f0; }
+progress::-webkit-progress-value { background: linear-gradient(90deg, #0d6efd, #6610f2); }
+progress::-moz-progress-bar { background: linear-gradient(90deg, #0d6efd, #6610f2); }
 
-#text { font-weight: bold; margin-bottom: 20px; color: #00ffff; }
+#text {
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-size: 24px;        /* 放大字型 */
+  text-align: center;      /* 置中 */
+  color: #0d6efd;
+}
 
 input, button {
   padding: 8px;
   margin: 6px 0;
   border-radius: 6px;
-  border: none;
+  border: 1px solid #ccc;
   font-size: 16px;
 }
 
 input { width: calc(50% - 10px); margin-right: 10px; }
 
 button {
-  background: linear-gradient(to right, #00bfff, #8a2be2);
+  background: linear-gradient(to right, #0d6efd, #6610f2);
   color: #fff;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
 }
 
-button:hover { background: linear-gradient(to right, #8a2be2, #00bfff); }
+button:hover { background: linear-gradient(to right, #6610f2, #0d6efd); }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 16px;
-  background: rgba(255,255,255,0.05);
+  background: #ffffff; /* 清爽表格背景 */
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 th, td {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid #e0e0e0;
 }
 
 th {
-  background: rgba(0,191,255,0.3);
-  color: #fff;
-  text-shadow: 0 0 3px #000;
+  background: #e9f2ff;
+  color: #0d6efd;
 }
 
-tbody tr:hover { background: rgba(255,255,255,0.1); }
+tbody tr:hover { background: #f1f7ff; }
 
-/* ===== 高亮動畫 ===== */
+/* 高亮動畫 */
 .highlight {
   animation: highlightAnim 3s forwards;
 }
 
 @keyframes highlightAnim {
-  0% { background-color: rgba(255,255,255,0.5); }
+  0% { background-color: #ffeeba; }
   100% { background-color: transparent; }
 }
 </style>
@@ -115,15 +120,14 @@ tbody tr:hover { background: rgba(255,255,255,0.1); }
 const SCRIPT_URL = "https://script.google.com/macros/s/XXXX/exec"; // ← 改成你的 Apps Script URL
 const MAX = 50000000;
 
-// 讀取資料
 async function fetchRecords() {
   const res = await fetch(SCRIPT_URL);
   const data = await res.json();
   return data;
 }
 
-// 更新 UI
-let lastCount = 0; // 記錄上次名冊長度
+let lastCount = 0;
+
 async function updateUI() {
   const records = await fetchRecords();
   const list = document.getElementById("list");
@@ -134,22 +138,15 @@ async function updateUI() {
     total += Number(r.amount);
     const row = document.createElement("tr");
     row.innerHTML = `<td>${r.name}</td><td>${Number(r.amount).toLocaleString()}</td>`;
-    
-    // 如果這筆是新加入的，加上 highlight class
-    if(index >= lastCount) {
-      row.classList.add("highlight");
-    }
-
+    if(index >= lastCount) { row.classList.add("highlight"); }
     list.appendChild(row);
   });
 
-  lastCount = records.length; // 更新紀錄長度
-
+  lastCount = records.length;
   document.getElementById("bar").value = total;
   document.getElementById("text").innerText = total.toLocaleString() + " / " + MAX.toLocaleString();
 }
 
-// 新增紀錄
 async function addRecord() {
   const name = document.getElementById("name").value.trim();
   const amount = Number(document.getElementById("amount").value);
@@ -165,7 +162,6 @@ async function addRecord() {
   updateUI();
 }
 
-// 每 5 秒自動刷新
 setInterval(updateUI, 5000);
 updateUI();
 </script>
