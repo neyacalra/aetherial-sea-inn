@@ -10,6 +10,7 @@
     --primary-purple: #8a2be2;
     --bg-dark: #0b0f2a;
     --card-bg: rgba(255, 255, 255, 0.07);
+    --input-bg: #12162d;
   }
 
   body {
@@ -22,66 +23,73 @@
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 0 30px rgba(0,0,0,0.8);
-    min-height: 100vh;
   }
 
-  /* 標題與視覺效果 */
   h2 { 
     color: #ffd700; 
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(0, 191, 255, 0.3); 
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); 
     text-align: center; 
     margin-bottom: 30px;
-    font-size: 2rem;
   }
 
   h3 { color: #ffd700; margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px; }
 
-  /* --- 流光進度條核心樣式 --- */
+  /* --- 進度條容器 (槽) --- */
   .progress-container {
     width: 100%;
-    background-color: #1a1e36;
-    border-radius: 20px;
-    padding: 4px;
-    border: 1px solid rgba(0, 191, 255, 0.3);
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    height: 32px;
+    background-color: rgba(0, 0, 0, 0.6); /* 未達成區域的顏色 */
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden; /* 確保內部光束不外溢 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
     margin-bottom: 8px;
   }
 
-  progress {
-    width: 100%;
-    height: 24px;
-    -webkit-appearance: none;
-    appearance: none;
-    border: none;
-    display: block;
-  }
-
-  /* Webkit (Chrome/Safari) 進度條動畫 */
-  progress::-webkit-progress-bar {
-    background-color: transparent;
-    border-radius: 20px;
-  }
-
-  progress::-webkit-progress-value {
-    border-radius: 20px;
+  /* --- 進度填充層 (流光只在此處) --- */
+  #bar {
+    height: 100%;
+    width: 0%; /* JS 控制 */
     background: linear-gradient(90deg, 
-      #00bfff, #8a2be2, #00bfff, #8a2be2); /* 重複漸變以實現循環 */
-    background-size: 200% 100%; /* 放大背景寬度 */
-    animation: flowLight 2s linear infinite; /* 流光動畫 */
-    box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+      var(--primary-blue), 
+      var(--primary-purple), 
+      var(--primary-blue)
+    );
+    background-size: 200% 100%;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden; /* 關鍵：裁切內部掃描光束 */
+    transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: flowLight 3s linear infinite;
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
   }
 
-  /* Firefox 進度條動畫 */
-  progress::-moz-progress-bar {
-    border-radius: 20px;
-    background: linear-gradient(90deg, #00bfff, #8a2be2, #00bfff);
-    background-size: 200% 100%;
-    animation: flowLight 2s linear infinite;
+  /* 內部的動態掃描強光 */
+  #bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.3), 
+      transparent
+    );
+    animation: scan 2s infinite linear;
   }
 
   @keyframes flowLight {
     0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  @keyframes scan {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
   }
 
   #text {
@@ -93,7 +101,7 @@
     margin-bottom: 40px;
   }
 
-  /* --- 新增紀錄區塊排版 --- */
+  /* --- 輸入區塊優化 --- */
   .input-card {
     background: var(--card-bg);
     padding: 20px;
@@ -111,7 +119,7 @@
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #333;
-    background: #12162d;
+    background: var(--input-bg);
     color: #fff;
     font-size: 16px;
     transition: all 0.3s;
@@ -135,53 +143,36 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: 0.3s ease;
   }
 
   button:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(138, 43, 226, 0.5);
   }
 
-  button:active { transform: translateY(0); }
-  button:disabled { opacity: 0.6; cursor: not-allowed; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* --- 表格優化 --- */
+  /* --- 表格樣式 --- */
   table {
     width: 100%;
     border-collapse: collapse;
     background: var(--card-bg);
     border-radius: 12px;
     overflow: hidden;
-    margin-top: 10px;
   }
 
-  th {
-    background: rgba(0, 191, 255, 0.2);
-    color: #00ffff;
-    padding: 15px;
-    text-align: left;
-    font-size: 15px;
-  }
-
-  td {
-    padding: 12px 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
+  th { background: rgba(0, 191, 255, 0.2); color: #00ffff; padding: 15px; text-align: left; }
+  td { padding: 12px 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
 
   .highlight { animation: highlightAnim 2s ease-out forwards; }
-
   @keyframes highlightAnim {
     0% { background-color: rgba(0, 191, 255, 0.4); }
     100% { background-color: transparent; }
   }
 
-  /* 手機版微調 */
   @media (max-width: 480px) {
     input, button { flex: 1 1 100%; }
-    h2 { font-size: 1.5rem; }
   }
 </style>
 </head>
@@ -190,14 +181,14 @@
 <h2>🚢 星海旅店｜買房基金進度</h2>
 
 <div class="progress-container">
-  <progress id="bar" value="0" max="53000000"></progress>
+  <div id="bar"></div>
 </div>
 <p id="text">0 / 53,000,000</p>
 
-<h3>🚀 新增紀錄</h3>
+<h3>🚀 新增貢獻</h3>
 <div class="input-card">
   <input type="text" id="name" placeholder="角色名稱" autocomplete="off">
-  <input type="number" id="amount" placeholder="輸入金額 (G)">
+  <input type="number" id="amount" placeholder="金額 (G)">
   <button id="add-btn" onclick="addRecord()">確認新增</button>
 </div>
 
@@ -212,36 +203,35 @@
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3y0EdA_6K_mvm2JQ3MdtAsOt-D1fTskGFjkpOVwus_VhBmr9zTQ9FTHp3TTPzBBjH4A/exec";
 const MAX = 53000000;
+let lastCount = 0;
 
 async function fetchRecords() {
   try {
     const res = await fetch(SCRIPT_URL);
     return await res.json();
-  } catch (e) {
-    console.error("Fetch error:", e);
-    return [];
+  } catch (e) { 
+    console.error("讀取失敗:", e);
+    return []; 
   }
 }
-
-let lastCount = 0;
 
 async function updateUI() {
   const records = await fetchRecords();
   const list = document.getElementById("list");
   let total = 0;
   
-  // 建立新的內容緩衝
   const newListHTML = records.map((r, index) => {
     total += Number(r.amount);
-    const highlightClass = index >= lastCount && lastCount !== 0 ? 'class="highlight"' : '';
+    const highlightClass = (index >= lastCount && lastCount !== 0) ? 'class="highlight"' : '';
     return `<tr ${highlightClass}><td>${r.name}</td><td>${Number(r.amount).toLocaleString()}</td></tr>`;
-  }).reverse().join(''); // 最新的顯示在最上面
+  }).reverse().join('');
 
   list.innerHTML = newListHTML;
   lastCount = records.length;
 
-  // 更新進度條與數值
-  document.getElementById("bar").value = total;
+  // 動態更新進度條寬度
+  const percentage = Math.min((total / MAX) * 100, 100);
+  document.getElementById("bar").style.width = percentage + "%";
   document.getElementById("text").innerText = total.toLocaleString() + " / " + MAX.toLocaleString();
 }
 
@@ -250,42 +240,35 @@ async function addRecord() {
   const amountInput = document.getElementById("amount");
   const btn = document.getElementById("add-btn");
   
-  const name = nameInput.value.trim();
-  const amount = Number(amountInput.value);
-
-  if (!name || amount <= 0) {
-    alert("請輸入名稱與正確金額");
+  if (!nameInput.value.trim() || amountInput.value <= 0) {
+    alert("請填寫正確的名稱與金額");
     return;
   }
 
-  btn.innerText = "傳送中...";
+  btn.innerText = " 傳送中...";
   btn.disabled = true;
 
   try {
     await fetch(SCRIPT_URL, {
       method: "POST",
       mode: "no-cors", 
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, amount })
+      body: JSON.stringify({ name: nameInput.value, amount: amountInput.value })
     });
 
     nameInput.value = "";
     amountInput.value = "";
-    alert("發送成功！資料同步中...");
-    
-    // 立即觸發一次更新
+    // 給予後端一點寫入時間再刷 UI
     setTimeout(updateUI, 2000); 
-
   } catch (error) {
-    alert("連線發生問題，請檢查網路。");
+    alert("連線發生問題");
   } finally {
     btn.innerText = "確認新增";
     btn.disabled = false;
   }
 }
 
-// 每 10 秒自動刷新一次
-setInterval(updateUI, 5000);
+// 每 3 秒自動檢查一次
+setInterval(updateUI, 3000);
 updateUI();
 </script>
 
