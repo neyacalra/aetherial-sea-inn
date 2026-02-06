@@ -2,112 +2,204 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>星海旅店｜買房基金進度</title>
 <style>
-body {
-  font-family: "Noto Sans TC", system-ui, sans-serif;
-  max-width: 750px;
-  margin: 40px auto;
-  line-height: 1.6;
-  background: linear-gradient(to bottom, #0b0f2a, #1b1f3f);
-  color: #f0f0f0;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.6);
-}
+  :root {
+    --primary-blue: #00bfff;
+    --primary-purple: #8a2be2;
+    --bg-dark: #0b0f2a;
+    --card-bg: rgba(255, 255, 255, 0.07);
+  }
 
-h2, h3 { color: #ffd700; text-shadow: 0 0 6px #00bfff; }
+  body {
+    font-family: "Noto Sans TC", system-ui, sans-serif;
+    max-width: 750px;
+    margin: 40px auto;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #0b0f2a, #1b1f3f);
+    color: #f0f0f0;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    min-height: 100vh;
+  }
 
-progress {
-  width: 100%;
-  height: 28px;
-  -webkit-appearance: none;
-  appearance: none;
-  border-radius: 14px;
-  overflow: hidden;
-  margin-bottom: 12px;
-  background-color: #2a2f4a;
-}
+  /* 標題與視覺效果 */
+  h2 { 
+    color: #ffd700; 
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(0, 191, 255, 0.3); 
+    text-align: center; 
+    margin-bottom: 30px;
+    font-size: 2rem;
+  }
 
-progress::-webkit-progress-bar { background-color: #2a2f4a; }
-progress::-webkit-progress-value { background: linear-gradient(90deg, #00bfff, #8a2be2); }
-progress::-moz-progress-bar { background: linear-gradient(90deg, #00bfff, #8a2be2); }
+  h3 { color: #ffd700; margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px; }
 
-#text {
-  font-weight: bold;
-  margin-bottom: 20px;
-  font-size: 24px;       /* 放大字型 */
-  text-align: center;     /* 置中 */
-  color: #00ffff;
-}
+  /* --- 流光進度條核心樣式 --- */
+  .progress-container {
+    width: 100%;
+    background-color: #1a1e36;
+    border-radius: 20px;
+    padding: 4px;
+    border: 1px solid rgba(0, 191, 255, 0.3);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    margin-bottom: 8px;
+  }
 
-input, button {
-  padding: 8px;
-  margin: 6px 0;
-  border-radius: 6px;
-  border: none;
-  font-size: 16px;
-}
+  progress {
+    width: 100%;
+    height: 24px;
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    display: block;
+  }
 
-input { width: calc(50% - 10px); margin-right: 10px; }
+  /* Webkit (Chrome/Safari) 進度條動畫 */
+  progress::-webkit-progress-bar {
+    background-color: transparent;
+    border-radius: 20px;
+  }
 
-button {
-  background: linear-gradient(to right, #00bfff, #8a2be2);
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
+  progress::-webkit-progress-value {
+    border-radius: 20px;
+    background: linear-gradient(90deg, 
+      #00bfff, #8a2be2, #00bfff, #8a2be2); /* 重複漸變以實現循環 */
+    background-size: 200% 100%; /* 放大背景寬度 */
+    animation: flowLight 2s linear infinite; /* 流光動畫 */
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+  }
 
-button:hover { background: linear-gradient(to right, #8a2be2, #00bfff); }
+  /* Firefox 進度條動畫 */
+  progress::-moz-progress-bar {
+    border-radius: 20px;
+    background: linear-gradient(90deg, #00bfff, #8a2be2, #00bfff);
+    background-size: 200% 100%;
+    animation: flowLight 2s linear infinite;
+  }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 16px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
+  @keyframes flowLight {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
 
-th, td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
+  #text {
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    margin-bottom: 40px;
+  }
 
-th {
-  background: rgba(0,191,255,0.3);
-  color: #fff;
-  text-shadow: 0 0 3px #000;
-}
+  /* --- 新增紀錄區塊排版 --- */
+  .input-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    backdrop-filter: blur(5px);
+  }
 
-tbody tr:hover { background: rgba(255,255,255,0.1); }
+  input {
+    flex: 2;
+    min-width: 160px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #12162d;
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.3s;
+  }
 
-/* 高亮動畫 */
-.highlight {
-  animation: highlightAnim 3s forwards;
-}
+  input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.4);
+  }
 
-@keyframes highlightAnim {
-  0% { background-color: rgba(255,255,255,0.5); }
-  100% { background-color: transparent; }
-}
+  #amount { flex: 1.5; }
+
+  button {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.5);
+  }
+
+  button:active { transform: translateY(0); }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* --- 表格優化 --- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  th {
+    background: rgba(0, 191, 255, 0.2);
+    color: #00ffff;
+    padding: 15px;
+    text-align: left;
+    font-size: 15px;
+  }
+
+  td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
+
+  .highlight { animation: highlightAnim 2s ease-out forwards; }
+
+  @keyframes highlightAnim {
+    0% { background-color: rgba(0, 191, 255, 0.4); }
+    100% { background-color: transparent; }
+  }
+
+  /* 手機版微調 */
+  @media (max-width: 480px) {
+    input, button { flex: 1 1 100%; }
+    h2 { font-size: 1.5rem; }
+  }
 </style>
 </head>
 <body>
 
 <h2>🚢 星海旅店｜買房基金進度</h2>
 
-<progress id="bar" value="0" max="53000000"></progress>
+<div class="progress-container">
+  <progress id="bar" value="0" max="53000000"></progress>
+</div>
 <p id="text">0 / 53,000,000</p>
 
-<h3>新增紀錄</h3>
-<input type="text" id="name" placeholder="角色名稱">
-<input type="number" id="amount" placeholder="輸入金額">
-<br>
-<button onclick="addRecord()">新增</button>
+<h3>🚀 新增紀錄</h3>
+<div class="input-card">
+  <input type="text" id="name" placeholder="角色名稱" autocomplete="off">
+  <input type="number" id="amount" placeholder="輸入金額 (G)">
+  <button id="add-btn" onclick="addRecord()">確認新增</button>
+</div>
 
 <h3>📜 投資名冊</h3>
 <table>
@@ -118,13 +210,17 @@ tbody tr:hover { background: rgba(255,255,255,0.1); }
 </table>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3y0EdA_6K_mvm2JQ3MdtAsOt-D1fTskGFjkpOVwus_VhBmr9zTQ9FTHp3TTPzBBjH4A/exec"; // ← 替換成你的 Apps Script URL
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3y0EdA_6K_mvm2JQ3MdtAsOt-D1fTskGFjkpOVwus_VhBmr9zTQ9FTHp3TTPzBBjH4A/exec";
 const MAX = 53000000;
 
 async function fetchRecords() {
-  const res = await fetch(SCRIPT_URL);
-  const data = await res.json();
-  return data;
+  try {
+    const res = await fetch(SCRIPT_URL);
+    return await res.json();
+  } catch (e) {
+    console.error("Fetch error:", e);
+    return [];
+  }
 }
 
 let lastCount = 0;
@@ -132,18 +228,19 @@ let lastCount = 0;
 async function updateUI() {
   const records = await fetchRecords();
   const list = document.getElementById("list");
-  list.innerHTML = "";
   let total = 0;
-
-  records.forEach((r, index) => {
+  
+  // 建立新的內容緩衝
+  const newListHTML = records.map((r, index) => {
     total += Number(r.amount);
-    const row = document.createElement("tr");
-    row.innerHTML = `<td>${r.name}</td><td>${Number(r.amount).toLocaleString()}</td>`;
-    if(index >= lastCount) { row.classList.add("highlight"); }
-    list.appendChild(row);
-  });
+    const highlightClass = index >= lastCount && lastCount !== 0 ? 'class="highlight"' : '';
+    return `<tr ${highlightClass}><td>${r.name}</td><td>${Number(r.amount).toLocaleString()}</td></tr>`;
+  }).reverse().join(''); // 最新的顯示在最上面
 
+  list.innerHTML = newListHTML;
   lastCount = records.length;
+
+  // 更新進度條與數值
   document.getElementById("bar").value = total;
   document.getElementById("text").innerText = total.toLocaleString() + " / " + MAX.toLocaleString();
 }
@@ -151,6 +248,8 @@ async function updateUI() {
 async function addRecord() {
   const nameInput = document.getElementById("name");
   const amountInput = document.getElementById("amount");
+  const btn = document.getElementById("add-btn");
+  
   const name = nameInput.value.trim();
   const amount = Number(amountInput.value);
 
@@ -159,13 +258,10 @@ async function addRecord() {
     return;
   }
 
-  // 暫時停用按鈕，避免重複點擊
-  const btn = document.querySelector("button");
   btn.innerText = "傳送中...";
   btn.disabled = true;
 
   try {
-    // 這裡使用 'no-cors' 模式來避免瀏覽器阻擋
     await fetch(SCRIPT_URL, {
       method: "POST",
       mode: "no-cors", 
@@ -173,33 +269,25 @@ async function addRecord() {
       body: JSON.stringify({ name, amount })
     });
 
-    // 清空輸入框
     nameInput.value = "";
     amountInput.value = "";
+    alert("發送成功！資料同步中...");
     
-    alert("發送請求成功！請稍候幾秒等待資料同步。");
-    
-    // 延遲 2 秒再更新 UI，給 GAS 一點寫入時間
+    // 立即觸發一次更新
     setTimeout(updateUI, 2000); 
 
   } catch (error) {
-    console.error("錯誤:", error);
-    alert("連線發生問題，請檢查網路或 URL 設定。");
+    alert("連線發生問題，請檢查網路。");
   } finally {
-    btn.innerText = "新增";
+    btn.innerText = "確認新增";
     btn.disabled = false;
   }
 }
 
+// 每 10 秒自動刷新一次
 setInterval(updateUI, 5000);
 updateUI();
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
