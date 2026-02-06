@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>星海旅店｜公會房基金進度</title>
+<title>星海旅店｜潛水艇基金進度</title>
 <style>
   body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont;
@@ -13,6 +13,7 @@
   progress {
     width: 100%;
     height: 24px;
+    margin-bottom: 12px;
   }
   input, button {
     padding: 6px;
@@ -37,7 +38,7 @@
   .admin {
     background: #f0f7ff;
     padding: 10px;
-    margin-top: 16px;
+    margin-top: 20px;
     border-left: 4px solid #4a90e2;
   }
   .hidden {
@@ -48,30 +49,18 @@
 
 <body>
 
-<h2>🚢 星海旅店｜公會房基金進度</h2>
+<h2>🚢 星海旅店｜潛水艇基金進度</h2>
 
 <progress id="bar" value="0" max="50000000"></progress>
 <p id="text">0 / 50,000,000</p>
 
-<!-- 管理登入 -->
-<div id="login">
-  <h3>🔒 管理員登入</h3>
-  <input type="password" id="password" placeholder="輸入管理密碼">
-  <br>
-  <button onclick="login()">登入</button>
-</div>
-
-<!-- 管理模式 -->
-<div id="adminPanel" class="admin hidden">
-  <h3>🛠️ 管理模式</h3>
-
-  <input type="text" id="name" placeholder="角色名稱">
-  <br>
-  <input type="number" id="amount" placeholder="輸入金額">
-  <br>
-  <button onclick="add()">新增紀錄</button>
-  <button onclick="logout()">登出</button>
-</div>
+<!-- 普通玩家輸入區 -->
+<h3>新增紀錄</h3>
+<input type="text" id="name" placeholder="角色名稱">
+<br>
+<input type="number" id="amount" placeholder="輸入金額">
+<br>
+<button onclick="add()">新增</button>
 
 <h3>📜 投資名冊</h3>
 <table>
@@ -84,6 +73,21 @@
   </thead>
   <tbody id="list"></tbody>
 </table>
+
+<!-- 管理員登入（低調在最下面） -->
+<div id="login" class="admin">
+  <h4>🔒 管理員登入（低調使用）</h4>
+  <input type="password" id="password" placeholder="輸入管理密碼">
+  <br>
+  <button onclick="login()">登入</button>
+</div>
+
+<!-- 管理模式 -->
+<div id="adminPanel" class="admin hidden">
+  <h4>🛠️ 管理模式</h4>
+  <p>登入後可以刪除錯誤紀錄</p>
+  <button onclick="logout()">登出</button>
+</div>
 
 <script>
 const MAX = 50000000;
